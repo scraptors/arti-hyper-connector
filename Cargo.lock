@@ -452,7 +452,7 @@ dependencies = [
 [[package]]
 name = "boring"
 version = "4.17.0"
-source = "git+https://github.com/sjcobb2022/boring#8760a9838aed667d268b4e5e2d082dd9596a2593"
+source = "git+https://github.com/scraptors/boring#5b84c207d6f7389b043854559a7ceec8e799634d"
 dependencies = [
  "bitflags 2.9.2",
  "boring-sys",
@@ -464,7 +464,7 @@ dependencies = [
 [[package]]
 name = "boring-sys"
 version = "4.17.0"
-source = "git+https://github.com/sjcobb2022/boring#8760a9838aed667d268b4e5e2d082dd9596a2593"
+source = "git+https://github.com/scraptors/boring#5b84c207d6f7389b043854559a7ceec8e799634d"
 dependencies = [
  "autocfg",
  "bindgen",
@@ -1612,7 +1612,7 @@ dependencies = [
 [[package]]
 name = "h2"
 version = "0.4.12"
-source = "git+https://github.com/sjcobb2022/h2#5a0653eae055b6f95b00f3c0a7b2a874818eda22"
+source = "git+https://github.com/scraptors/h2#5a0653eae055b6f95b00f3c0a7b2a874818eda22"
 dependencies = [
  "atomic-waker",
  "bytes",
@@ -1814,7 +1814,7 @@ dependencies = [
 [[package]]
 name = "hyper"
 version = "1.6.0"
-source = "git+https://github.com/sjcobb2022/hyper#efe1189d1254fcffe0e1f70fd429b362f79077b7"
+source = "git+https://github.com/scraptors/hyper#4d290727dd04591f9a99e6fc7b0409d29f0f3194"
 dependencies = [
  "atomic-waker",
  "bytes",
@@ -1835,7 +1835,7 @@ dependencies = [
 [[package]]
 name = "hyper-boring"
 version = "4.17.0"
-source = "git+https://github.com/sjcobb2022/boring#8760a9838aed667d268b4e5e2d082dd9596a2593"
+source = "git+https://github.com/scraptors/boring#5b84c207d6f7389b043854559a7ceec8e799634d"
 dependencies = [
  "antidote",
  "boring",
@@ -1854,7 +1854,7 @@ dependencies = [
 [[package]]
 name = "hyper-util"
 version = "0.1.16"
-source = "git+https://github.com/sjcobb2022/hyper-util#99995346b9b31746666fb3da4cef71da4442591b"
+source = "git+https://github.com/scraptors/hyper-util#88c4d34601668f66a65e28a1eb285b4cc06b4faa"
 dependencies = [
  "bytes",
  "futures-channel",
@@ -3895,7 +3895,7 @@ dependencies = [
 [[package]]
 name = "tokio-boring"
 version = "4.17.0"
-source = "git+https://github.com/sjcobb2022/boring#8760a9838aed667d268b4e5e2d082dd9596a2593"
+source = "git+https://github.com/scraptors/boring#5b84c207d6f7389b043854559a7ceec8e799634d"
 dependencies = [
  "boring",
  "boring-sys",
@@ -5246,11 +5246,11 @@ checksum = "ac3b87c63620426dd9b991e5ce0329eff545bccbbb34f3be09ff6fb6ab51b7b6"
 
 [[package]]
 name = "winapi-util"
-version = "0.1.9"
+version = "0.1.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cf221c93e13a30d793f7645a0e7762c55d169dbb0a49671918a2319d289b10bb"
+checksum = "0978bf7171b3d90bac376700cb56d606feb40f251a475a5d6634613564460b22"
 dependencies = [
- "windows-sys 0.59.0",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
