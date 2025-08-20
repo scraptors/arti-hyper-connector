@@ -152,7 +152,7 @@ dependencies = [
  "rand 0.9.2",
  "safelog",
  "serde",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "time",
  "tor-async-utils",
  "tor-basic-utils",
@@ -188,10 +188,10 @@ dependencies = [
  "boring",
  "http 1.3.1",
  "http-body-util",
- "hyper 1.6.0",
+ "hyper 1.7.0",
  "hyper-boring",
  "hyper-util",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tokio",
  "tor-rtcompat",
  "tower-service",
@@ -218,7 +218,7 @@ dependencies = [
  "nom",
  "num-traits",
  "rusticata-macros",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
 ]
 
 [[package]]
@@ -452,7 +452,7 @@ dependencies = [
 [[package]]
 name = "boring"
 version = "4.17.0"
-source = "git+https://github.com/scraptors/boring#5b84c207d6f7389b043854559a7ceec8e799634d"
+source = "git+https://github.com/scraptors/boring?rev=482a1351bcb8e6de1d601e31f56c9f734a1fc720#482a1351bcb8e6de1d601e31f56c9f734a1fc720"
 dependencies = [
  "bitflags 2.9.2",
  "boring-sys",
@@ -464,7 +464,7 @@ dependencies = [
 [[package]]
 name = "boring-sys"
 version = "4.17.0"
-source = "git+https://github.com/scraptors/boring#5b84c207d6f7389b043854559a7ceec8e799634d"
+source = "git+https://github.com/scraptors/boring?rev=482a1351bcb8e6de1d601e31f56c9f734a1fc720#482a1351bcb8e6de1d601e31f56c9f734a1fc720"
 dependencies = [
  "autocfg",
  "bindgen",
@@ -1427,7 +1427,7 @@ dependencies = [
  "libc",
  "pwd-grp",
  "serde",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "walkdir",
 ]
 
@@ -1612,7 +1612,7 @@ dependencies = [
 [[package]]
 name = "h2"
 version = "0.4.12"
-source = "git+https://github.com/scraptors/h2#5a0653eae055b6f95b00f3c0a7b2a874818eda22"
+source = "git+https://github.com/scraptors/h2?rev=5a0653eae055b6f95b00f3c0a7b2a874818eda22#5a0653eae055b6f95b00f3c0a7b2a874818eda22"
 dependencies = [
  "atomic-waker",
  "bytes",
@@ -1813,8 +1813,8 @@ dependencies = [
 
 [[package]]
 name = "hyper"
-version = "1.6.0"
-source = "git+https://github.com/scraptors/hyper#4d290727dd04591f9a99e6fc7b0409d29f0f3194"
+version = "1.7.0"
+source = "git+https://github.com/scraptors/hyper?rev=892332bd58c05ae549a97147ebb46d78ae6e1abf#892332bd58c05ae549a97147ebb46d78ae6e1abf"
 dependencies = [
  "atomic-waker",
  "bytes",
@@ -1835,14 +1835,14 @@ dependencies = [
 [[package]]
 name = "hyper-boring"
 version = "4.17.0"
-source = "git+https://github.com/scraptors/boring#5b84c207d6f7389b043854559a7ceec8e799634d"
+source = "git+https://github.com/scraptors/boring?rev=482a1351bcb8e6de1d601e31f56c9f734a1fc720#482a1351bcb8e6de1d601e31f56c9f734a1fc720"
 dependencies = [
  "antidote",
  "boring",
  "http 0.2.12",
  "http 1.3.1",
  "hyper 0.14.32",
- "hyper 1.6.0",
+ "hyper 1.7.0",
  "hyper-util",
  "linked_hash_set",
  "tokio",
@@ -1854,7 +1854,7 @@ dependencies = [
 [[package]]
 name = "hyper-util"
 version = "0.1.16"
-source = "git+https://github.com/scraptors/hyper-util#88c4d34601668f66a65e28a1eb285b4cc06b4faa"
+source = "git+https://github.com/scraptors/hyper-util?rev=840cc5ae3ff65a907d4f86aead5dfe4475dcb013#840cc5ae3ff65a907d4f86aead5dfe4475dcb013"
 dependencies = [
  "bytes",
  "futures-channel",
@@ -1862,7 +1862,7 @@ dependencies = [
  "futures-util",
  "http 1.3.1",
  "http-body 1.0.1",
- "hyper 1.6.0",
+ "hyper 1.7.0",
  "libc",
  "pin-project-lite",
  "socket2 0.6.0",
@@ -3070,7 +3070,7 @@ checksum = "a4e608c6638b9c18977b00b475ac1f28d14e84b27d8d42f70e0bf1e3dec127ac"
 dependencies = [
  "getrandom 0.2.16",
  "libredox",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
 ]
 
 [[package]]
@@ -3260,7 +3260,7 @@ dependencies = [
  "educe",
  "either",
  "fluid-let",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
 ]
 
 [[package]]
@@ -3563,7 +3563,7 @@ dependencies = [
  "paste",
  "serde",
  "slotmap",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "void",
 ]
 
@@ -3762,15 +3762,15 @@ checksum = "55937e1799185b12863d447f42597ed69d9928686b8d88a1df17376a097d8369"
 
 [[package]]
 name = "tempfile"
-version = "3.20.0"
+version = "3.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e8a64e3985349f2441a1a9ef0b853f869006c3855f2cda6862a94d26ebb9d6a1"
+checksum = "15b61f8f20e3a6f7e0649d825294eaf317edce30f82cf6026e7e4cb9222a7d1e"
 dependencies = [
  "fastrand",
  "getrandom 0.3.3",
  "once_cell",
  "rustix",
- "windows-sys 0.59.0",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
@@ -3784,11 +3784,11 @@ dependencies = [
 
 [[package]]
 name = "thiserror"
-version = "2.0.15"
+version = "2.0.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "80d76d3f064b981389ecb4b6b7f45a0bf9fdac1d5b9204c7bd6714fecc302850"
+checksum = "3467d614147380f2e4e374161426ff399c91084acd2363eaf549172b3d5e60c0"
 dependencies = [
- "thiserror-impl 2.0.15",
+ "thiserror-impl 2.0.16",
 ]
 
 [[package]]
@@ -3804,9 +3804,9 @@ dependencies = [
 
 [[package]]
 name = "thiserror-impl"
-version = "2.0.15"
+version = "2.0.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "44d29feb33e986b6ea906bd9c3559a856983f92371b3eaa5e83782a351623de0"
+checksum = "6c5e1be1c48b9172ee610da68fd9cd2770e7a4056cb3fc98710ee6906f0c7960"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -3895,7 +3895,7 @@ dependencies = [
 [[package]]
 name = "tokio-boring"
 version = "4.17.0"
-source = "git+https://github.com/scraptors/boring#5b84c207d6f7389b043854559a7ceec8e799634d"
+source = "git+https://github.com/scraptors/boring?rev=482a1351bcb8e6de1d601e31f56c9f734a1fc720#482a1351bcb8e6de1d601e31f56c9f734a1fc720"
 dependencies = [
  "boring",
  "boring-sys",
@@ -3980,7 +3980,7 @@ dependencies = [
  "oneshot-fused-workaround",
  "pin-project",
  "postage",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "void",
 ]
 
@@ -4000,7 +4000,7 @@ dependencies = [
  "serde",
  "slab",
  "smallvec",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
 ]
 
 [[package]]
@@ -4015,7 +4015,7 @@ dependencies = [
  "educe",
  "getrandom 0.3.3",
  "safelog",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tor-error",
  "tor-llcrypto",
  "zeroize",
@@ -4037,7 +4037,7 @@ dependencies = [
  "paste",
  "rand 0.9.2",
  "smallvec",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tor-basic-utils",
  "tor-bytes",
  "tor-cert",
@@ -4061,7 +4061,7 @@ dependencies = [
  "derive_builder_fork_arti",
  "derive_more",
  "digest",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tor-bytes",
  "tor-checkable",
  "tor-llcrypto",
@@ -4084,7 +4084,7 @@ dependencies = [
  "rand 0.9.2",
  "safelog",
  "serde",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tor-async-utils",
  "tor-basic-utils",
  "tor-cell",
@@ -4110,7 +4110,7 @@ checksum = "5703d370d4ee4b5c318ac8b944a3b183e2865f6f0104475d36b9e1b8c89f0f38"
 dependencies = [
  "humantime",
  "signature",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tor-llcrypto",
 ]
 
@@ -4140,7 +4140,7 @@ dependencies = [
  "safelog",
  "serde",
  "static_assertions",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tor-async-utils",
  "tor-basic-utils",
  "tor-chanmgr",
@@ -4186,7 +4186,7 @@ dependencies = [
  "serde-value",
  "serde_ignored",
  "strum",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "toml",
  "tor-basic-utils",
  "tor-error",
@@ -4204,7 +4204,7 @@ dependencies = [
  "directories",
  "serde",
  "shellexpand",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tor-error",
  "tor-general-addr",
 ]
@@ -4217,7 +4217,7 @@ checksum = "b5164757c908a50737ebd483a0e29380e53db0b14103f7996751e28964c6d98a"
 dependencies = [
  "digest",
  "hex",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tor-llcrypto",
 ]
 
@@ -4237,7 +4237,7 @@ dependencies = [
  "httpdate",
  "itertools 0.14.0",
  "memchr",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tor-circmgr",
  "tor-error",
  "tor-hscrypto",
@@ -4282,7 +4282,7 @@ dependencies = [
  "signature",
  "static_assertions",
  "strum",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "time",
  "tor-async-utils",
  "tor-basic-utils",
@@ -4315,7 +4315,7 @@ dependencies = [
  "retry-error",
  "static_assertions",
  "strum",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tracing",
  "void",
 ]
@@ -4327,7 +4327,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bc9d4a8c4593a0c590c66bae348590fb49dbf04da264cacc0631d71a92e5d2ac"
 dependencies = [
  "derive_more",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "void",
 ]
 
@@ -4356,7 +4356,7 @@ dependencies = [
  "safelog",
  "serde",
  "strum",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tor-async-utils",
  "tor-basic-utils",
  "tor-config",
@@ -4393,7 +4393,7 @@ dependencies = [
  "safelog",
  "slotmap-careful",
  "strum",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tor-async-utils",
  "tor-basic-utils",
  "tor-bytes",
@@ -4436,7 +4436,7 @@ dependencies = [
  "serde",
  "signature",
  "subtle",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tor-basic-utils",
  "tor-bytes",
  "tor-error",
@@ -4460,7 +4460,7 @@ dependencies = [
  "rand 0.9.2",
  "signature",
  "ssh-key",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tor-bytes",
  "tor-cert",
  "tor-checkable",
@@ -4492,7 +4492,7 @@ dependencies = [
  "serde",
  "signature",
  "ssh-key",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tor-basic-utils",
  "tor-bytes",
  "tor-config",
@@ -4526,7 +4526,7 @@ dependencies = [
  "serde",
  "serde_with",
  "strum",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tor-basic-utils",
  "tor-bytes",
  "tor-config",
@@ -4567,7 +4567,7 @@ dependencies = [
  "sha3",
  "signature",
  "subtle",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tor-memquota",
  "visibility",
  "x25519-dalek",
@@ -4582,7 +4582,7 @@ checksum = "8fc97bd804ac7aeaf771dc4507c65f8c5fac1d4f8e469551aaa3bf240fce1171"
 dependencies = [
  "futures",
  "humantime",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tor-error",
  "tor-rtcompat",
  "tracing",
@@ -4608,7 +4608,7 @@ dependencies = [
  "slotmap-careful",
  "static_assertions",
  "sysinfo",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tor-async-utils",
  "tor-basic-utils",
  "tor-config",
@@ -4638,7 +4638,7 @@ dependencies = [
  "serde",
  "static_assertions",
  "strum",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "time",
  "tor-basic-utils",
  "tor-error",
@@ -4677,7 +4677,7 @@ dependencies = [
  "signature",
  "smallvec",
  "subtle",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "time",
  "tinystr",
  "tor-basic-utils",
@@ -4714,7 +4714,7 @@ dependencies = [
  "sanitize-filename",
  "serde",
  "serde_json",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "time",
  "tor-async-utils",
  "tor-basic-utils",
@@ -4759,7 +4759,7 @@ dependencies = [
  "static_assertions",
  "subtle",
  "sync_wrapper",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tokio",
  "tokio-util",
  "tor-async-utils",
@@ -4795,7 +4795,7 @@ dependencies = [
  "caret",
  "paste",
  "serde_with",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tor-bytes",
 ]
 
@@ -4833,7 +4833,7 @@ dependencies = [
  "native-tls",
  "paste",
  "pin-project",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tokio",
  "tokio-util",
  "tor-error",
@@ -4862,7 +4862,7 @@ dependencies = [
  "priority-queue",
  "slotmap-careful",
  "strum",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tor-error",
  "tor-general-addr",
  "tor-rtcompat",
@@ -4883,7 +4883,7 @@ dependencies = [
  "educe",
  "safelog",
  "subtle",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tor-bytes",
  "tor-error",
 ]
@@ -4897,7 +4897,7 @@ dependencies = [
  "derive-deftly 1.2.0",
  "derive_more",
  "serde",
- "thiserror 2.0.15",
+ "thiserror 2.0.16",
  "tor-memquota",
 ]
 
