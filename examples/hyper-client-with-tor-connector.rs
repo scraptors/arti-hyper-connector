@@ -10,9 +10,9 @@ use boring::{
 use http::{HeaderMap, HeaderName, HeaderValue, Request};
 use http_body_util::{BodyExt, Empty};
 use hyper::{
-    Priority, PseudoOrder, SettingsOrder, StreamDependency,
+    Priorities, PseudoOrder, SettingsOrder, StreamDependency,
     body::Bytes,
-    h2::frame::{Priorities, PseudoId, SettingId, StreamId},
+    h2::frame::{Priority, PseudoId, SettingId, StreamId},
 };
 use hyper_boring::v1::HttpsConnector;
 use hyper_util::rt::TokioExecutor;
@@ -65,10 +65,10 @@ async fn main() -> anyhow::Result<()> {
         .expect("Can construct https connection over Arti");
 
     https_tor.set_callback(|config, _| {
-        config.set_verify_hostname(false);
+        // config.set_verify_hostname(false);
         // config.set_alps_protos(Some(b"h2"), false)?;
-        config.set_alps_use_new_codepoint(false);
-        config.set_enable_ech_grease(true);
+        // config.set_alps_use_new_codepoint(false);
+        // config.set_enable_ech_grease(true);
 
         // configure alps here + other here
         // no_ticket: bool,
@@ -78,11 +78,76 @@ async fn main() -> anyhow::Result<()> {
         // alps_protocols: Option<Cow<'static, [AlpsProtocol]>>,
         // alps_use_new_codepoint: bool,
         // random_aes_hw_override: bool,
-        config.set_options(SslOptions::NO_TICKET).unwrap();
+        // config.set_options(SslOptions::NO_TICKET).unwrap();
         Ok(())
     });
 
+    let headers_pseudo_order = PseudoOrder::builder()
+        .extend([
+            PseudoId::Method,
+            PseudoId::Scheme,
+            PseudoId::Authority,
+            PseudoId::Path,
+        ])
+        .build();
+
+    let settings_order = SettingsOrder::builder()
+        .extend([
+            SettingId::HeaderTableSize,
+            SettingId::EnablePush,
+            SettingId::MaxConcurrentStreams,
+            SettingId::InitialWindowSize,
+            SettingId::MaxFrameSize,
+            SettingId::MaxHeaderListSize,
+            SettingId::EnableConnectProtocol,
+            SettingId::NoRfc7540Priorities,
+        ])
+        .build();
+
+    let priorities = Priorities::builder()
+        .extend([
+            Priority::new(
+                StreamId::from(3),
+                StreamDependency::new(StreamId::zero(), 200, false),
+            ),
+            Priority::new(
+                StreamId::from(5),
+                StreamDependency::new(StreamId::zero(), 100, false),
+            ),
+            Priority::new(
+                StreamId::from(7),
+                StreamDependency::new(StreamId::zero(), 0, false),
+            ),
+            Priority::new(
+                StreamId::from(9),
+                StreamDependency::new(StreamId::from(7), 0, false),
+            ),
+            Priority::new(
+                StreamId::from(11),
+                StreamDependency::new(StreamId::from(3), 0, false),
+            ),
+            Priority::new(
+                StreamId::from(13),
+                StreamDependency::new(StreamId::zero(), 240, false),
+            ),
+        ])
+        .build();
+
     let client = hyper_util::client::legacy::Client::builder(TokioExecutor::new())
+        .http1_allow_obsolete_multiline_headers_in_responses(true)
+        .http1_max_headers(100)
+        .http2_initial_stream_window_size(131072)
+        .http2_max_frame_size(16384)
+        .http2_initial_connection_window_size(12517377 + 65535)
+        .http2_initial_stream_id(15)
+        .http2_header_table_size(65536)
+        .http2_initial_stream_window_size(131072)
+        .http2_max_frame_size(16384)
+        .http2_initial_connection_window_size(12517377 + 65535)
+        .http2_headers_stream_dependency(Some(StreamDependency::new(StreamId::zero(), 41, false)))
+        .http2_headers_pseudo_order(Some(headers_pseudo_order))
+        .http2_settings_order(Some(settings_order))
+        .http2_priorities(Some(priorities))
         .build::<_, Empty<Bytes>>(https_tor);
 
     let headers = build_headers(url.host().expect("uri has no host"));
@@ -120,31 +185,22 @@ fn build_ssl_connector() -> anyhow::Result<SslConnectorBuilder> {
     ssl.set_cipher_list(join!(
         ":",
         "TLS_AES_128_GCM_SHA256",
-        "TLS_AES_256_GCM_SHA384",
         "TLS_CHACHA20_POLY1305_SHA256",
-        "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
+        "TLS_AES_256_GCM_SHA384",
         "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
-        "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256",
-        "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
         "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+        "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256",
         "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256",
-        "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384",
-        "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256",
+        "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
+        "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
         "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA",
         "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA",
-        "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384",
-        "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256",
-        "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
         "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA",
-        "TLS_RSA_WITH_AES_256_GCM_SHA384",
+        "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
         "TLS_RSA_WITH_AES_128_GCM_SHA256",
-        "TLS_RSA_WITH_AES_256_CBC_SHA256",
-        "TLS_RSA_WITH_AES_128_CBC_SHA256",
-        "TLS_RSA_WITH_AES_256_CBC_SHA",
+        "TLS_RSA_WITH_AES_256_GCM_SHA384",
         "TLS_RSA_WITH_AES_128_CBC_SHA",
-        "TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA",
-        "TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA",
-        "TLS_RSA_WITH_3DES_EDE_CBC_SHA"
+        "TLS_RSA_WITH_AES_256_CBC_SHA"
     ))?;
 
     ssl.set_sigalgs_list(join!(
@@ -174,23 +230,8 @@ fn build_ssl_connector() -> anyhow::Result<SslConnectorBuilder> {
 
     ssl.set_record_size_limit(0x4001);
 
-    // let cache = opts.pre_shared_key.then(|| {
-    //             let cache = self.session_cache.clone();
-    //
-    //             connector.set_session_cache_mode(SslSessionCacheMode::CLIENT);
-    //             connector.set_new_session_callback({
-    //                 let cache = cache.clone();
-    //                 move |ssl, session| {
-    //                     if let Ok(Some(key)) = key_index().map(|idx| ssl.ex_data(idx)) {
-    //                         cache.lock().insert(key.clone(), session);
-    //                     }
-    //                 }
-    //             });
-    //
-    //             cache
-    //         });
-    //
-    // .pre_shared_key(true)
+    // ssl.add_certificate_compression_algorithm(compressor)
+
     ssl.set_grease_enabled(true);
     ssl.set_min_proto_version(Some(SslVersion::TLS1))?;
     ssl.set_max_proto_version(Some(SslVersion::TLS1_3))?;
@@ -228,77 +269,6 @@ fn build_ssl_connector() -> anyhow::Result<SslConnectorBuilder> {
     Ok(ssl)
 }
 
-fn build_http2_builder() -> hyper::client::conn::http2::Builder<TokioExecutor> {
-    // HTTP/2 headers frame pseudo-header order
-    let headers_pseudo_order = PseudoOrder::builder()
-        .extend([
-            PseudoId::Method,
-            PseudoId::Scheme,
-            PseudoId::Authority,
-            PseudoId::Path,
-        ])
-        .build();
-
-    // HTTP/2 settings frame order
-    let settings_order = SettingsOrder::builder()
-        .extend([
-            SettingId::HeaderTableSize,
-            SettingId::EnablePush,
-            SettingId::MaxConcurrentStreams,
-            SettingId::InitialWindowSize,
-            SettingId::MaxFrameSize,
-            SettingId::MaxHeaderListSize,
-            SettingId::EnableConnectProtocol,
-            SettingId::NoRfc7540Priorities,
-        ])
-        .build();
-
-    // HTTP/2 Priority frames
-    let priorities = Priorities::builder()
-        .extend([
-            Priority::new(
-                StreamId::from(3),
-                StreamDependency::new(StreamId::zero(), 200, false),
-            ),
-            Priority::new(
-                StreamId::from(5),
-                StreamDependency::new(StreamId::zero(), 100, false),
-            ),
-            Priority::new(
-                StreamId::from(7),
-                StreamDependency::new(StreamId::zero(), 0, false),
-            ),
-            Priority::new(
-                StreamId::from(9),
-                StreamDependency::new(StreamId::from(7), 0, false),
-            ),
-            Priority::new(
-                StreamId::from(11),
-                StreamDependency::new(StreamId::from(3), 0, false),
-            ),
-            Priority::new(
-                StreamId::from(13),
-                StreamDependency::new(StreamId::zero(), 240, false),
-            ),
-        ])
-        .build();
-
-    hyper::client::conn::http2::Builder::new(TokioExecutor::new())
-        .initial_stream_window_size(131072)
-        .max_frame_size(16384)
-        .initial_connection_window_size(12517377 + 65535)
-        .initial_stream_id(15)
-        .header_table_size(65536)
-        .initial_stream_window_size(131072)
-        .max_frame_size(16384)
-        .initial_connection_window_size(12517377 + 65535)
-        .headers_stream_dependency(Some(StreamDependency::new(StreamId::zero(), 41, false)))
-        .headers_pseudo_order(Some(headers_pseudo_order))
-        .settings_order(Some(settings_order))
-        .priorities(Some(priorities))
-        .to_owned()
-}
-
 fn build_headers(host: &str) -> HeaderMap<HeaderValue> {
     let mut headers = HeaderMap::new();
     headers.insert(
@@ -309,11 +279,11 @@ fn build_headers(host: &str) -> HeaderMap<HeaderValue> {
     );
     headers.insert(
         "ACCEPT-LANGUAGE",
-        HeaderValue::from_static("en-US,en;q=0.5"),
+        HeaderValue::from_static("en-US,en;q=0.9"),
     );
     headers.insert(
         "ACCEPT-ENCODING",
-        HeaderValue::from_static("gzip, deflate, br, zstd"),
+        HeaderValue::from_static("gzip, deflate, br"),
     );
     headers.insert(
         http::header::ACCEPT,

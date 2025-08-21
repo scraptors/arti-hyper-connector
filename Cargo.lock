@@ -452,7 +452,7 @@ dependencies = [
 [[package]]
 name = "boring"
 version = "4.17.0"
-source = "git+https://github.com/scraptors/boring?rev=482a1351bcb8e6de1d601e31f56c9f734a1fc720#482a1351bcb8e6de1d601e31f56c9f734a1fc720"
+source = "git+https://github.com/scraptors/boring?rev=a88181fec18ac6be35d3b2431e7c61d343731721#a88181fec18ac6be35d3b2431e7c61d343731721"
 dependencies = [
  "bitflags 2.9.2",
  "boring-sys",
@@ -464,7 +464,7 @@ dependencies = [
 [[package]]
 name = "boring-sys"
 version = "4.17.0"
-source = "git+https://github.com/scraptors/boring?rev=482a1351bcb8e6de1d601e31f56c9f734a1fc720#482a1351bcb8e6de1d601e31f56c9f734a1fc720"
+source = "git+https://github.com/scraptors/boring?rev=a88181fec18ac6be35d3b2431e7c61d343731721#a88181fec18ac6be35d3b2431e7c61d343731721"
 dependencies = [
  "autocfg",
  "bindgen",
@@ -1327,14 +1327,14 @@ dependencies = [
 
 [[package]]
 name = "filetime"
-version = "0.2.25"
+version = "0.2.26"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "35c0522e981e68cbfa8c3f978441a5f34b30b96e146b33cd3359176b50fe8586"
+checksum = "bc0505cd1b6fa6580283f6bdf70a73fcf4aba1184038c90902b92b3dd0df63ed"
 dependencies = [
  "cfg-if",
  "libc",
  "libredox",
- "windows-sys 0.59.0",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
@@ -1814,7 +1814,7 @@ dependencies = [
 [[package]]
 name = "hyper"
 version = "1.7.0"
-source = "git+https://github.com/scraptors/hyper?rev=892332bd58c05ae549a97147ebb46d78ae6e1abf#892332bd58c05ae549a97147ebb46d78ae6e1abf"
+source = "git+https://github.com/scraptors/hyper?rev=c0f5afc323a932bf0677d740c9cd8a10417caf34#c0f5afc323a932bf0677d740c9cd8a10417caf34"
 dependencies = [
  "atomic-waker",
  "bytes",
@@ -1835,7 +1835,7 @@ dependencies = [
 [[package]]
 name = "hyper-boring"
 version = "4.17.0"
-source = "git+https://github.com/scraptors/boring?rev=482a1351bcb8e6de1d601e31f56c9f734a1fc720#482a1351bcb8e6de1d601e31f56c9f734a1fc720"
+source = "git+https://github.com/scraptors/boring?rev=a88181fec18ac6be35d3b2431e7c61d343731721#a88181fec18ac6be35d3b2431e7c61d343731721"
 dependencies = [
  "antidote",
  "boring",
@@ -1854,7 +1854,7 @@ dependencies = [
 [[package]]
 name = "hyper-util"
 version = "0.1.16"
-source = "git+https://github.com/scraptors/hyper-util?rev=840cc5ae3ff65a907d4f86aead5dfe4475dcb013#840cc5ae3ff65a907d4f86aead5dfe4475dcb013"
+source = "git+https://github.com/scraptors/hyper-util?rev=7e2ff9b1c7b3f3ec2d55b467abfab9ab9f3e7abf#7e2ff9b1c7b3f3ec2d55b467abfab9ab9f3e7abf"
 dependencies = [
  "bytes",
  "futures-channel",
@@ -2061,9 +2061,9 @@ dependencies = [
 
 [[package]]
 name = "inventory"
-version = "0.3.20"
+version = "0.3.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ab08d7cd2c5897f2c949e5383ea7c7db03fb19130ffcfbf7eda795137ae3cb83"
+checksum = "bc61209c082fbeb19919bee74b176221b27223e27b65d781eb91af24eb1fb46e"
 dependencies = [
  "rustversion",
 ]
@@ -3895,7 +3895,7 @@ dependencies = [
 [[package]]
 name = "tokio-boring"
 version = "4.17.0"
-source = "git+https://github.com/scraptors/boring?rev=482a1351bcb8e6de1d601e31f56c9f734a1fc720#482a1351bcb8e6de1d601e31f56c9f734a1fc720"
+source = "git+https://github.com/scraptors/boring?rev=a88181fec18ac6be35d3b2431e7c61d343731721#a88181fec18ac6be35d3b2431e7c61d343731721"
 dependencies = [
  "boring",
  "boring-sys",
