@@ -1,10 +1,7 @@
 use arti_client::{StreamPrefs, TorClient, config::TorClientConfigBuilder};
 use arti_hyper_connector::TorHttpConnector;
 use boring::{
-    ssl::{
-        ExtensionType, SslConnector, SslConnectorBuilder, SslCurve, SslMethod, SslOptions,
-        SslVerifyMode, SslVersion,
-    },
+    ssl::{ExtensionType, SslConnector, SslConnectorBuilder, SslCurve, SslMethod, SslVersion},
     x509::{X509, store::X509StoreBuilder},
 };
 use http::{HeaderMap, HeaderName, HeaderValue, Request};
@@ -65,11 +62,10 @@ async fn main() -> anyhow::Result<()> {
         .expect("Can construct https connection over Arti");
 
     https_tor.set_callback(|config, _| {
-        // If the session cache is enabled, we try to retrieve the session
-        // associated with the key. If it exists, we set it in the SSL configuration.
         config.set_verify_hostname(true);
         config.set_use_server_name_indication(true);
-        config.set_verify(SslVerifyMode::PEER);
+        // config.set_verify(SslVerifyMode::NONE);
+        // config.set_options(SslOptions::NO_PSK_DHE_KE).unwrap();
         // config.set_options(SslOptions::NO_TICKET).unwrap();
         Ok(())
     });
@@ -161,7 +157,7 @@ async fn main() -> anyhow::Result<()> {
 fn build_ssl_connector() -> anyhow::Result<SslConnectorBuilder> {
     let mut ssl = SslConnector::builder(SslMethod::tls())?;
 
-    ssl.set_key_shares_limit(3);
+    ssl.set_key_shares_limit(2);
 
     ssl.set_curves(&[
         SslCurve::X25519,
@@ -244,8 +240,12 @@ fn build_ssl_connector() -> anyhow::Result<SslConnectorBuilder> {
     ssl.set_prefer_chacha20(true);
     ssl.set_aes_hw_override(true);
 
+    ssl.set_record_size_limit(0x4001);
+
+    // ssl.set_grease_enabled(false);
+
     ssl.enable_ocsp_stapling();
-    ssl.enable_signed_cert_timestamps();
+    // ssl.enable_signed_cert_timestamps();
 
     // configure certs
     let mut x509store = X509StoreBuilder::new()?;
