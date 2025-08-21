@@ -3,7 +3,7 @@ use arti_hyper_connector::TorHttpConnector;
 use boring::{
     ssl::{
         ExtensionType, SslConnector, SslConnectorBuilder, SslCurve, SslMethod, SslOptions,
-        SslVersion,
+        SslVerifyMode, SslVersion,
     },
     x509::{X509, store::X509StoreBuilder},
 };
@@ -65,19 +65,11 @@ async fn main() -> anyhow::Result<()> {
         .expect("Can construct https connection over Arti");
 
     https_tor.set_callback(|config, _| {
-        // config.set_verify_hostname(false);
-        // config.set_alps_protos(Some(b"h2"), false)?;
-        // config.set_alps_use_new_codepoint(false);
-        // config.set_enable_ech_grease(true);
-
-        // configure alps here + other here
-        // no_ticket: bool,
-        // enable_ech_grease: bool,
-        // verify_hostname: bool,
-        // tls_sni: bool,
-        // alps_protocols: Option<Cow<'static, [AlpsProtocol]>>,
-        // alps_use_new_codepoint: bool,
-        // random_aes_hw_override: bool,
+        // If the session cache is enabled, we try to retrieve the session
+        // associated with the key. If it exists, we set it in the SSL configuration.
+        config.set_verify_hostname(true);
+        config.set_use_server_name_indication(true);
+        config.set_verify(SslVerifyMode::PEER);
         // config.set_options(SslOptions::NO_TICKET).unwrap();
         Ok(())
     });
@@ -85,9 +77,9 @@ async fn main() -> anyhow::Result<()> {
     let headers_pseudo_order = PseudoOrder::builder()
         .extend([
             PseudoId::Method,
+            PseudoId::Path,
             PseudoId::Scheme,
             PseudoId::Authority,
-            PseudoId::Path,
         ])
         .build();
 
@@ -134,23 +126,22 @@ async fn main() -> anyhow::Result<()> {
         .build();
 
     let client = hyper_util::client::legacy::Client::builder(TokioExecutor::new())
-        .http1_allow_obsolete_multiline_headers_in_responses(true)
-        .http1_max_headers(100)
-        .http2_initial_stream_window_size(131072)
-        .http2_max_frame_size(16384)
-        .http2_initial_connection_window_size(12517377 + 65535)
         .http2_initial_stream_id(15)
         .http2_header_table_size(65536)
+        .http2_priorities(Some(priorities))
+        .http2_headers_stream_dependency(Some(StreamDependency::new(StreamId::from(13), 41, false)))
+        .http2_adaptive_window(false)
+        .http2_initial_max_send_streams(100)
+        .http2_max_send_buf_size(1024 * 1024)
+        .http2_keep_alive_while_idle(false)
         .http2_initial_stream_window_size(131072)
         .http2_max_frame_size(16384)
         .http2_initial_connection_window_size(12517377 + 65535)
-        .http2_headers_stream_dependency(Some(StreamDependency::new(StreamId::zero(), 41, false)))
         .http2_headers_pseudo_order(Some(headers_pseudo_order))
         .http2_settings_order(Some(settings_order))
-        .http2_priorities(Some(priorities))
         .build::<_, Empty<Bytes>>(https_tor);
 
-    let headers = build_headers(url.host().expect("uri has no host"));
+    let headers = build_headers(url.authority().expect("uri has no host").as_str());
 
     let mut req = Request::get(url).body(Empty::<Bytes>::new())?;
 
@@ -170,10 +161,9 @@ async fn main() -> anyhow::Result<()> {
 fn build_ssl_connector() -> anyhow::Result<SslConnectorBuilder> {
     let mut ssl = SslConnector::builder(SslMethod::tls())?;
 
-    ssl.set_verify(boring::ssl::SslVerifyMode::NONE);
+    ssl.set_key_shares_limit(3);
 
     ssl.set_curves(&[
-        SslCurve::X25519_MLKEM768,
         SslCurve::X25519,
         SslCurve::SECP256R1,
         SslCurve::SECP384R1,
@@ -228,15 +218,9 @@ fn build_ssl_connector() -> anyhow::Result<SslConnectorBuilder> {
 
     ssl.set_alpn_protos(b"\x02h2\x08http/1.1")?;
 
-    ssl.set_record_size_limit(0x4001);
+    ssl.set_min_proto_version(Some(SslVersion::TLS1_1)).unwrap();
+    ssl.set_max_proto_version(Some(SslVersion::TLS1_3)).unwrap();
 
-    // ssl.add_certificate_compression_algorithm(compressor)
-
-    ssl.set_grease_enabled(true);
-    ssl.set_min_proto_version(Some(SslVersion::TLS1))?;
-    ssl.set_max_proto_version(Some(SslVersion::TLS1_3))?;
-    ssl.set_prefer_chacha20(true);
-    ssl.set_aes_hw_override(false);
     ssl.set_extension_permutation(&[
         ExtensionType::SERVER_NAME,
         ExtensionType::EXTENDED_MASTER_SECRET,
@@ -247,6 +231,7 @@ fn build_ssl_connector() -> anyhow::Result<SslConnectorBuilder> {
         ExtensionType::APPLICATION_LAYER_PROTOCOL_NEGOTIATION,
         ExtensionType::STATUS_REQUEST,
         ExtensionType::DELEGATED_CREDENTIAL,
+        ExtensionType::CERTIFICATE_TIMESTAMP,
         ExtensionType::KEY_SHARE,
         ExtensionType::SUPPORTED_VERSIONS,
         ExtensionType::SIGNATURE_ALGORITHMS,
@@ -255,6 +240,12 @@ fn build_ssl_connector() -> anyhow::Result<SslConnectorBuilder> {
         ExtensionType::CERT_COMPRESSION,
         ExtensionType::ENCRYPTED_CLIENT_HELLO,
     ])?;
+
+    ssl.set_prefer_chacha20(true);
+    ssl.set_aes_hw_override(true);
+
+    ssl.enable_ocsp_stapling();
+    ssl.enable_signed_cert_timestamps();
 
     // configure certs
     let mut x509store = X509StoreBuilder::new()?;
@@ -271,33 +262,37 @@ fn build_ssl_connector() -> anyhow::Result<SslConnectorBuilder> {
 
 fn build_headers(host: &str) -> HeaderMap<HeaderValue> {
     let mut headers = HeaderMap::new();
+
+    headers.insert(
+        HeaderName::from_static("te"),
+        HeaderValue::from_static("trailers"),
+    );
+
     headers.insert(
         "USER-AGENT",
         HeaderValue::from_static(
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:136.0) Gecko/20100101 Firefox/136.0",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_17; rv:109.0) Gecko/20000101 Firefox/109.0",
         ),
     );
-    headers.insert(
-        "ACCEPT-LANGUAGE",
-        HeaderValue::from_static("en-US,en;q=0.9"),
-    );
-    headers.insert(
-        "ACCEPT-ENCODING",
-        HeaderValue::from_static("gzip, deflate, br"),
-    );
+
     headers.insert(
         http::header::ACCEPT,
         HeaderValue::from_static("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"),
     );
 
+    headers.insert(
+        "ACCEPT-ENCODING",
+        HeaderValue::from_static("gzip, deflate, br"),
+    );
+
+    headers.insert(
+        "ACCEPT-LANGUAGE",
+        HeaderValue::from_static("en-US,en;q=0.9"),
+    );
+
     headers.insert("sec-fetch-dest", HeaderValue::from_static("document"));
     headers.insert("sec-fetch-mode", HeaderValue::from_static("navigate"));
     headers.insert("sec-fetch-site", HeaderValue::from_static("none"));
-
-    headers.insert(
-        HeaderName::from_static("priority"),
-        HeaderValue::from_static("u=0, i"),
-    );
 
     headers.insert(http::header::HOST, HeaderValue::from_str(host).unwrap());
     headers
