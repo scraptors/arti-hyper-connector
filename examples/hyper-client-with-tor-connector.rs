@@ -74,8 +74,8 @@ async fn main() -> anyhow::Result<()> {
         .extend([
             PseudoId::Method,
             PseudoId::Path,
-            PseudoId::Scheme,
             PseudoId::Authority,
+            PseudoId::Scheme,
         ])
         .build();
 
@@ -135,6 +135,7 @@ async fn main() -> anyhow::Result<()> {
         .http2_initial_connection_window_size(12517377 + 65535)
         .http2_headers_pseudo_order(Some(headers_pseudo_order))
         .http2_settings_order(Some(settings_order))
+        .http2_max_header_list_size(None)
         .build::<_, Empty<Bytes>>(https_tor);
 
     let headers = build_headers(url.authority().expect("uri has no host").as_str());
@@ -294,6 +295,6 @@ fn build_headers(host: &str) -> HeaderMap<HeaderValue> {
     headers.insert("sec-fetch-mode", HeaderValue::from_static("navigate"));
     headers.insert("sec-fetch-site", HeaderValue::from_static("none"));
 
-    headers.insert(http::header::HOST, HeaderValue::from_str(host).unwrap());
+    // headers.insert(http::header::HOST, HeaderValue::from_str(host).unwrap());
     headers
 }
