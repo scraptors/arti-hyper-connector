@@ -13,7 +13,7 @@ use hyper::{
 };
 use hyper_boring::v1::HttpsConnector;
 use hyper_util::rt::TokioExecutor;
-use tracing::level_filters::LevelFilter;
+use tracing_subscriber::EnvFilter;
 
 const TEST_URL: &str = "https://tls.peet.ws/api/all";
 
@@ -28,7 +28,7 @@ macro_rules! join {
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt()
-        .with_max_level(LevelFilter::DEBUG)
+        .with_env_filter(EnvFilter::from_default_env())
         .init();
 
     let url_string = std::env::args()
@@ -138,7 +138,7 @@ async fn main() -> anyhow::Result<()> {
         .http2_max_header_list_size(None)
         .build::<_, Empty<Bytes>>(https_tor);
 
-    let headers = build_headers(url.authority().expect("uri has no host").as_str());
+    let headers = build_headers();
 
     let mut req = Request::get(url).body(Empty::<Bytes>::new())?;
 
@@ -261,7 +261,7 @@ fn build_ssl_connector() -> anyhow::Result<SslConnectorBuilder> {
     Ok(ssl)
 }
 
-fn build_headers(host: &str) -> HeaderMap<HeaderValue> {
+fn build_headers() -> HeaderMap<HeaderValue> {
     let mut headers = HeaderMap::new();
 
     headers.insert(
