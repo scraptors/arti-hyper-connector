@@ -24,6 +24,8 @@ tracing = "0.1.41"
 tracing-subscriber = { version = "0.3.19", features = ["env-filter"] }
 anyhow = "1.0.99"
 arti-client = { version = "0.33.0", features = ["onion-service-client"] }
+tower-http = { version = "0.6.6", features = ["decompression-full"] }
+tower = "0.5.2"
 
 [[example]]
 name = "hyper-client-with-tor-connector"

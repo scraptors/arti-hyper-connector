@@ -1,5 +1,5 @@
 use arti_client::{StreamPrefs, TorClient, config::TorClientConfigBuilder};
-use arti_hyper_connector::TorHttpConnector;
+use arti_hyper_connector::TorConnector;
 use boring::{
     ssl::{ExtensionType, SslConnector, SslConnectorBuilder, SslCurve, SslMethod, SslVersion},
     x509::{X509, store::X509StoreBuilder},
@@ -13,6 +13,8 @@ use hyper::{
 };
 use hyper_boring::v1::HttpsConnector;
 use hyper_util::rt::TokioExecutor;
+use tower::{Service, ServiceBuilder};
+use tower_http::decompression::DecompressionLayer;
 use tracing_subscriber::EnvFilter;
 
 const TEST_URL: &str = "https://tls.peet.ws/api/all";
@@ -36,8 +38,6 @@ async fn main() -> anyhow::Result<()> {
         .unwrap_or_else(|| TEST_URL.to_string());
     let url = url_string.parse::<hyper::Uri>().unwrap();
 
-    // let mut headers = build_headers(url.host().expect("uri has no host"));
-
     let mut config_builder = TorClientConfigBuilder::default();
 
     // Configure the address filters so that we only allow onion addresses to be queried.
@@ -53,8 +53,7 @@ async fn main() -> anyhow::Result<()> {
     let mut s_prefs = StreamPrefs::new();
     s_prefs.connect_to_onion_services(arti_client::config::BoolOrAuto::Explicit(true));
 
-    let mut tor_connector = TorHttpConnector::new(tor_client);
-    tor_connector.set_stream_prefs(s_prefs);
+    let tor_connector = TorConnector::new_with_prefs(tor_client, s_prefs);
 
     let ssl = build_ssl_connector().unwrap();
 
@@ -138,17 +137,25 @@ async fn main() -> anyhow::Result<()> {
         .http2_max_header_list_size(None)
         .build::<_, Empty<Bytes>>(https_tor);
 
+    // ez decompression
+    let mut client = ServiceBuilder::new()
+        .layer(DecompressionLayer::new())
+        .service(client);
+
     let headers = build_headers();
 
     let mut req = Request::get(url).body(Empty::<Bytes>::new())?;
 
-    *req.headers_mut() = headers.clone(); // preserve caller copy if needed
+    *req.headers_mut() = headers.clone();
+    // let res = client.request(req).await?;
 
-    let res = client.request(req).await?;
+    let res = client.call(req).await?;
 
-    let body_bytes = res.into_body().collect().await?.to_bytes();
-    let text = std::str::from_utf8(&body_bytes)?;
-    tracing::info!("\n{}", text);
+    let bytes = res.into_body().collect().await.unwrap().to_bytes().to_vec();
+
+    let bytes_str = String::from_utf8(bytes).unwrap();
+
+    tracing::info!("\n{}", bytes_str);
 
     Ok(())
 }
@@ -242,7 +249,6 @@ fn build_ssl_connector() -> anyhow::Result<SslConnectorBuilder> {
     ssl.set_aes_hw_override(true);
 
     ssl.set_record_size_limit(0x4001);
-
     // ssl.set_grease_enabled(false);
 
     ssl.enable_ocsp_stapling();
@@ -295,6 +301,5 @@ fn build_headers() -> HeaderMap<HeaderValue> {
     headers.insert("sec-fetch-mode", HeaderValue::from_static("navigate"));
     headers.insert("sec-fetch-site", HeaderValue::from_static("none"));
 
-    // headers.insert(http::header::HOST, HeaderValue::from_str(host).unwrap());
     headers
 }
