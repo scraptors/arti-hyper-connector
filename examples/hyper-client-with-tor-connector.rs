@@ -1,10 +1,12 @@
+use std::{collections::HashSet, time::Duration};
+
 use arti_client::{StreamPrefs, TorClient, config::TorClientConfigBuilder};
-use arti_hyper_connector::TorConnector;
+use arti_hyper_connector::ArtiConnector;
 use boring::{
     ssl::{ExtensionType, SslConnector, SslConnectorBuilder, SslCurve, SslMethod, SslVersion},
     x509::{X509, store::X509StoreBuilder},
 };
-use http::{HeaderMap, HeaderName, HeaderValue, Request};
+use http::{HeaderMap, HeaderName, HeaderValue, Request, Uri};
 use http_body_util::{BodyExt, Empty};
 use hyper::{
     Priorities, PseudoOrder, SettingsOrder, StreamDependency,
@@ -14,7 +16,15 @@ use hyper::{
 use hyper_boring::v1::HttpsConnector;
 use hyper_util::rt::TokioExecutor;
 use tower::{Service, ServiceBuilder, ServiceExt};
-use tower_http::{decompression::DecompressionLayer, trace::TraceLayer};
+use tower_http::{
+    decompression::DecompressionLayer,
+    follow_redirect::{
+        FollowRedirectLayer,
+        policy::{Action, Attempt, Limited, Policy, PolicyExt},
+    },
+    timeout::ResponseBodyTimeoutLayer,
+    trace::TraceLayer,
+};
 use tracing_subscriber::EnvFilter;
 
 const TEST_URL: &str = "https://tls.peet.ws/api/all";
@@ -23,6 +33,30 @@ macro_rules! join {
     ($sep:expr, $first:expr $(, $rest:expr)*) => {
         concat!($first $(, $sep, $rest)*)
     };
+}
+
+#[derive(Clone)]
+pub struct DetectCycle {
+    uris: HashSet<Uri>,
+}
+
+impl DetectCycle {
+    fn new() -> Self {
+        Self {
+            uris: HashSet::new(),
+        }
+    }
+}
+
+impl<B, E> Policy<B, E> for DetectCycle {
+    fn redirect(&mut self, attempt: &Attempt<'_>) -> Result<Action, E> {
+        if self.uris.contains(attempt.location()) {
+            Ok(Action::Stop)
+        } else {
+            self.uris.insert(attempt.previous().clone());
+            Ok(Action::Follow)
+        }
+    }
 }
 
 // TODO: [ ] Implement certificate compression algorithms (in their own util crate?)
@@ -51,16 +85,17 @@ async fn main() -> anyhow::Result<()> {
 
     let config = config_builder.build()?;
 
+    // bootstrap connection to the tor network.
     let tor_client = TorClient::create_bootstrapped(config).await?;
 
     let mut s_prefs = StreamPrefs::new();
     s_prefs.connect_to_onion_services(arti_client::config::BoolOrAuto::Explicit(true));
 
-    let tor_connector = TorConnector::new_with_prefs(tor_client, s_prefs);
+    let arti_connector = ArtiConnector::new_with_prefs(tor_client, s_prefs);
 
     let ssl = build_ssl_connector().unwrap();
 
-    let mut https_tor = HttpsConnector::with_connector(tor_connector, ssl)
+    let mut https_tor = HttpsConnector::with_connector(arti_connector, ssl)
         .expect("Can construct https connection over Arti");
 
     https_tor.set_callback(|config, _| {
@@ -140,10 +175,17 @@ async fn main() -> anyhow::Result<()> {
         .http2_max_header_list_size(None)
         .build::<_, Empty<Bytes>>(https_tor);
 
-    // ez decompression
+    let policy = Limited::new(5).and::<_, (), ()>(DetectCycle::new());
+
     let mut client = ServiceBuilder::new()
-        .layer(TraceLayer::new_for_http())
+        // decompression comes last as it is the most expensive task
         .layer(DecompressionLayer::new())
+        // handle the redirect policy.
+        .layer(FollowRedirectLayer::with_policy(policy))
+        // timeout all requests if longer than 30s
+        .layer(ResponseBodyTimeoutLayer::new(Duration::from_secs(30)))
+        // tracing should be our lowest layer so that we get logs throughout
+        .layer(TraceLayer::new_for_http())
         .service(client);
 
     let headers = build_headers();
