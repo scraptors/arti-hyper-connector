@@ -13,8 +13,8 @@ use hyper::{
 };
 use hyper_boring::v1::HttpsConnector;
 use hyper_util::rt::TokioExecutor;
-use tower::{Service, ServiceBuilder};
-use tower_http::decompression::DecompressionLayer;
+use tower::{Service, ServiceBuilder, ServiceExt};
+use tower_http::{decompression::DecompressionLayer, trace::TraceLayer};
 use tracing_subscriber::EnvFilter;
 
 const TEST_URL: &str = "https://tls.peet.ws/api/all";
@@ -24,6 +24,9 @@ macro_rules! join {
         concat!($first $(, $sep, $rest)*)
     };
 }
+
+// TODO: [ ] Implement certificate compression algorithms (in their own util crate?)
+// TODO: [ ] Implement cookie layer and cookie store PER url
 
 /* ============================= Entry ============================= */
 
@@ -139,6 +142,7 @@ async fn main() -> anyhow::Result<()> {
 
     // ez decompression
     let mut client = ServiceBuilder::new()
+        .layer(TraceLayer::new_for_http())
         .layer(DecompressionLayer::new())
         .service(client);
 
@@ -147,9 +151,8 @@ async fn main() -> anyhow::Result<()> {
     let mut req = Request::get(url).body(Empty::<Bytes>::new())?;
 
     *req.headers_mut() = headers.clone();
-    // let res = client.request(req).await?;
 
-    let res = client.call(req).await?;
+    let res = client.ready().await?.call(req).await?;
 
     let bytes = res.into_body().collect().await.unwrap().to_bytes().to_vec();
 
