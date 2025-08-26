@@ -56,12 +56,12 @@ impl From<arti_client::Error> for ConnectionError {
 
 /// A Hyper-compatible HTTP connector that establishes streams through Tor.
 #[derive(Clone)]
-pub struct TorConnector<R: Runtime> {
+pub struct ArtiConnector<R: Runtime> {
     client: TorClient<R>,
     prefs: Option<StreamPrefs>,
 }
 
-impl<R: Runtime> TorConnector<R> {
+impl<R: Runtime> ArtiConnector<R> {
     /// Create a new Tor HTTP connector with default behavior.
     pub fn new(client: TorClient<R>) -> Self {
         Self {
@@ -83,7 +83,7 @@ impl<R: Runtime> TorConnector<R> {
     }
 }
 
-impl<R: Runtime> Service<Uri> for TorConnector<R> {
+impl<R: Runtime> Service<Uri> for ArtiConnector<R> {
     type Response = TokioIo<TorStream>;
     type Error = ConnectionError;
     type Future =
