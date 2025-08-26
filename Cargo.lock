@@ -201,6 +201,7 @@ dependencies = [
  "anyhow",
  "arti-client",
  "boring",
+ "boring-util",
  "http 1.3.1",
  "http-body-util",
  "hyper 1.7.0",
@@ -490,6 +491,17 @@ dependencies = [
  "cmake",
  "fs_extra",
  "fslock",
+]
+
+[[package]]
+name = "boring-util"
+version = "0.1.0"
+source = "git+https://github.com/scraptors/boring-util#1cc3a12146ffee124e2755ee990fb7d63fad6629"
+dependencies = [
+ "boring",
+ "brotli",
+ "flate2",
+ "zstd",
 ]
 
 [[package]]

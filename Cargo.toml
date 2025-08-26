@@ -26,6 +26,7 @@ anyhow = "1.0.99"
 arti-client = { version = "0.33.0", features = ["onion-service-client"] }
 tower-http = { version = "0.6.6", features = ["decompression-full", "trace", "follow-redirect", "timeout"] }
 tower = "0.5.2"
+boring-util = { git = "https://github.com/scraptors/boring-util" }
 
 [[example]]
 name = "hyper-client-with-tor-connector"

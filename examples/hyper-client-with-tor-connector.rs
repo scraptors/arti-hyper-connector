@@ -2,10 +2,10 @@ use std::{collections::HashSet, time::Duration};
 
 use arti_client::{StreamPrefs, TorClient, config::TorClientConfigBuilder};
 use arti_hyper_connector::ArtiConnector;
-use boring::{
-    ssl::{ExtensionType, SslConnector, SslConnectorBuilder, SslCurve, SslMethod, SslVersion},
-    x509::{X509, store::X509StoreBuilder},
+use boring::ssl::{
+    ExtensionType, SslConnector, SslConnectorBuilder, SslCurve, SslMethod, SslVersion,
 };
+use boring_util::SslConnectorBuilderExt;
 use http::{HeaderMap, HeaderName, HeaderValue, Request, Uri};
 use http_body_util::{BodyExt, Empty};
 use hyper::{
@@ -59,7 +59,7 @@ impl<B, E> Policy<B, E> for DetectCycle {
     }
 }
 
-// TODO: [ ] Implement certificate compression algorithms (in their own util crate?)
+// DONE : [x] Implement certificate compression algorithms (in their own util crate?)
 // TODO: [ ] Implement cookie layer and cookie store PER url
 
 /* ============================= Entry ============================= */
@@ -101,9 +101,6 @@ async fn main() -> anyhow::Result<()> {
     https_tor.set_callback(|config, _| {
         config.set_verify_hostname(true);
         config.set_use_server_name_indication(true);
-        // config.set_verify(SslVerifyMode::NONE);
-        // config.set_options(SslOptions::NO_PSK_DHE_KE).unwrap();
-        // config.set_options(SslOptions::NO_TICKET).unwrap();
         Ok(())
     });
 
@@ -194,7 +191,7 @@ async fn main() -> anyhow::Result<()> {
 
     *req.headers_mut() = headers.clone();
 
-    let res = client.ready().await?.call(req).await?;
+    let res = client.ready().await?.call(req.clone()).await?;
 
     let bytes = res.into_body().collect().await.unwrap().to_bytes().to_vec();
 
@@ -299,15 +296,8 @@ fn build_ssl_connector() -> anyhow::Result<SslConnectorBuilder> {
     ssl.enable_ocsp_stapling();
     // ssl.enable_signed_cert_timestamps();
 
-    // configure certs
-    let mut x509store = X509StoreBuilder::new()?;
-
-    webpki_root_certs::TLS_SERVER_ROOT_CERTS
-        .iter()
-        .flat_map(|c| X509::from_der(AsRef::<[u8]>::as_ref(&c)))
-        .for_each(|x509| x509store.add_cert(x509).unwrap());
-
-    ssl.set_cert_store_builder(x509store);
+    ssl = ssl.set_cert_store_from_iter(webpki_root_certs::TLS_SERVER_ROOT_CERTS)?;
+    ssl = ssl.set_cert_verification(true)?;
 
     Ok(ssl)
 }
