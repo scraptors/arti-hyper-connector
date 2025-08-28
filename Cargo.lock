@@ -270,11 +270,13 @@ checksum = "9b34d609dfbaf33d6889b2b7106d3ca345eacad44200913df5ba02bfd31d2ba9"
 
 [[package]]
 name = "async-compression"
-version = "0.4.27"
+version = "0.4.28"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ddb939d66e4ae03cee6091612804ba446b12878410cfa17f785f4dd67d4014e8"
+checksum = "6448dfb3960f0b038e88c781ead1e7eb7929dfc3a71a1336ec9086c00f6d1e75"
 dependencies = [
  "brotli",
+ "compression-codecs",
+ "compression-core",
  "flate2",
  "futures-core",
  "futures-io",
@@ -472,7 +474,7 @@ dependencies = [
 [[package]]
 name = "boring"
 version = "4.17.0"
-source = "git+https://github.com/scraptors/boring?rev=62b03ada7fcb2d4201ccdabca2028bb2fbe09943#62b03ada7fcb2d4201ccdabca2028bb2fbe09943"
+source = "git+https://github.com/scraptors/boring?rev=1918704a217b3a8f0d2c3188705bd084c468e1b0#1918704a217b3a8f0d2c3188705bd084c468e1b0"
 dependencies = [
  "bitflags 2.9.3",
  "boring-sys",
@@ -484,7 +486,7 @@ dependencies = [
 [[package]]
 name = "boring-sys"
 version = "4.17.0"
-source = "git+https://github.com/scraptors/boring?rev=62b03ada7fcb2d4201ccdabca2028bb2fbe09943#62b03ada7fcb2d4201ccdabca2028bb2fbe09943"
+source = "git+https://github.com/scraptors/boring?rev=1918704a217b3a8f0d2c3188705bd084c468e1b0#1918704a217b3a8f0d2c3188705bd084c468e1b0"
 dependencies = [
  "autocfg",
  "bindgen",
@@ -496,7 +498,7 @@ dependencies = [
 [[package]]
 name = "boring-util"
 version = "0.1.0"
-source = "git+https://github.com/scraptors/boring-util#1cc3a12146ffee124e2755ee990fb7d63fad6629"
+source = "git+https://github.com/scraptors/boring-util?rev=baf7631cd07a9856ee14e093326aaa2b6c1b9e70#baf7631cd07a9856ee14e093326aaa2b6c1b9e70"
 dependencies = [
  "boring",
  "brotli",
@@ -538,7 +540,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "234113d19d0d7d613b40e86fb654acf958910802bcceab913a4f9e7cda03b1a4"
 dependencies = [
  "memchr",
- "regex-automata 0.4.9",
+ "regex-automata 0.4.10",
  "serde",
 ]
 
@@ -674,18 +676,18 @@ dependencies = [
 
 [[package]]
 name = "clap"
-version = "4.5.45"
+version = "4.5.46"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1fc0e74a703892159f5ae7d3aac52c8e6c392f5ae5f359c70b5881d60aaac318"
+checksum = "2c5e4fcf9c21d2e544ca1ee9d8552de13019a42aa7dbf32747fa7aaf1df76e57"
 dependencies = [
  "clap_builder",
 ]
 
 [[package]]
 name = "clap_builder"
-version = "4.5.44"
+version = "4.5.46"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b3e7f4214277f3c7aa526a59dd3fbe306a370daee1f8b7b8c987069cd8e888a8"
+checksum = "fecb53a0e6fcfb055f686001bc2e2592fa527efaf38dbe81a6a9563562e57d41"
 dependencies = [
  "anstyle",
  "clap_lex",
@@ -716,6 +718,29 @@ dependencies = [
  "wasix",
  "wasm-bindgen",
 ]
+
+[[package]]
+name = "compression-codecs"
+version = "0.4.28"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "46cc6539bf1c592cff488b9f253b30bc0ec50d15407c2cf45e27bd8f308d5905"
+dependencies = [
+ "brotli",
+ "compression-core",
+ "flate2",
+ "futures-core",
+ "liblzma",
+ "memchr",
+ "pin-project-lite",
+ "zstd",
+ "zstd-safe",
+]
+
+[[package]]
+name = "compression-core"
+version = "0.4.28"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2957e823c15bde7ecf1e8b64e537aa03a6be5fda0e2334e99887669e75b12e01"
 
 [[package]]
 name = "concurrent-queue"
@@ -1887,7 +1912,7 @@ dependencies = [
 [[package]]
 name = "hyper-boring"
 version = "4.17.0"
-source = "git+https://github.com/scraptors/boring?rev=62b03ada7fcb2d4201ccdabca2028bb2fbe09943#62b03ada7fcb2d4201ccdabca2028bb2fbe09943"
+source = "git+https://github.com/scraptors/boring?rev=1918704a217b3a8f0d2c3188705bd084c468e1b0#1918704a217b3a8f0d2c3188705bd084c468e1b0"
 dependencies = [
  "antidote",
  "boring",
@@ -2187,9 +2212,9 @@ checksum = "4a5f13b858c8d314ee3e8f639011f7ccefe71f97f96e50151fb991f267928e2c"
 
 [[package]]
 name = "jobserver"
-version = "0.1.33"
+version = "0.1.34"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "38f262f097c174adebe41eb73d66ae9c06b2844fb0da69969647bbddd9b0538a"
+checksum = "9afb3de4395d6b3e67a780b6de64b51c978ecf11cb9a462c66be7d4ca9039d33"
 dependencies = [
  "getrandom 0.3.3",
  "libc",
@@ -2261,9 +2286,9 @@ dependencies = [
 
 [[package]]
 name = "liblzma"
-version = "0.4.3"
+version = "0.4.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "272b875472a046e39ff7408374a5a050b112d2142211a0f54a295c0bd1c3c757"
+checksum = "10bf66f4598dc77ff96677c8e763655494f00ff9c1cf79e2eb5bb07bc31f807d"
 dependencies = [
  "liblzma-sys",
 ]
@@ -3157,14 +3182,14 @@ dependencies = [
 
 [[package]]
 name = "regex"
-version = "1.11.1"
+version = "1.11.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b544ef1b4eac5dc2db33ea63606ae9ffcfac26c1416a2806ae0bf5f56b201191"
+checksum = "23d7fd106d8c02486a8d64e778353d1cffe08ce79ac2e82f540c86d0facf6912"
 dependencies = [
  "aho-corasick",
  "memchr",
- "regex-automata 0.4.9",
- "regex-syntax 0.8.5",
+ "regex-automata 0.4.10",
+ "regex-syntax 0.8.6",
 ]
 
 [[package]]
@@ -3178,13 +3203,13 @@ dependencies = [
 
 [[package]]
 name = "regex-automata"
-version = "0.4.9"
+version = "0.4.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "809e8dc61f6de73b46c85f4c96486310fe304c434cfa43669d7b40f711150908"
+checksum = "6b9458fa0bfeeac22b5ca447c63aaf45f28439a709ccd244698632f9aa6394d6"
 dependencies = [
  "aho-corasick",
  "memchr",
- "regex-syntax 0.8.5",
+ "regex-syntax 0.8.6",
 ]
 
 [[package]]
@@ -3195,9 +3220,9 @@ checksum = "f162c6dd7b008981e4d40210aca20b4bd0f9b60ca9271061b07f78537722f2e1"
 
 [[package]]
 name = "regex-syntax"
-version = "0.8.5"
+version = "0.8.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2b15c43186be67a4fd63bee50d0303afffcef381492ebe2c5d87f324e1b8815c"
+checksum = "caf4aa5b0f434c91fe5c7f1ecb6a5ece2130b02ad2a590589dda5146df959001"
 
 [[package]]
 name = "retry-error"
@@ -3957,7 +3982,7 @@ dependencies = [
 [[package]]
 name = "tokio-boring"
 version = "4.17.0"
-source = "git+https://github.com/scraptors/boring?rev=62b03ada7fcb2d4201ccdabca2028bb2fbe09943#62b03ada7fcb2d4201ccdabca2028bb2fbe09943"
+source = "git+https://github.com/scraptors/boring?rev=1918704a217b3a8f0d2c3188705bd084c468e1b0#1918704a217b3a8f0d2c3188705bd084c468e1b0"
 dependencies = [
  "boring",
  "boring-sys",
@@ -5152,13 +5177,14 @@ checksum = "6d49784317cd0d1ee7ec5c716dd598ec5b4483ea832a2dced265471cc0f690ae"
 
 [[package]]
 name = "url"
-version = "2.5.6"
+version = "2.5.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "137a3c834eaf7139b73688502f3f1141a0337c5d8e4d9b536f9b8c796e26a7c4"
+checksum = "08bc136a29a3d1758e07a9cca267be308aeebf5cfd5a10f3f67ab2097683ef5b"
 dependencies = [
  "form_urlencoded",
  "idna",
  "percent-encoding",
+ "serde",
 ]
 
 [[package]]
