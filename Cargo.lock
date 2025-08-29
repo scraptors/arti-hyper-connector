@@ -474,7 +474,7 @@ dependencies = [
 [[package]]
 name = "boring"
 version = "4.17.0"
-source = "git+https://github.com/scraptors/boring?rev=1918704a217b3a8f0d2c3188705bd084c468e1b0#1918704a217b3a8f0d2c3188705bd084c468e1b0"
+source = "git+https://github.com/scraptors/boring?rev=716eec6b4311c9f1225a2bf506774348a75fa5f4#716eec6b4311c9f1225a2bf506774348a75fa5f4"
 dependencies = [
  "bitflags 2.9.3",
  "boring-sys",
@@ -486,7 +486,7 @@ dependencies = [
 [[package]]
 name = "boring-sys"
 version = "4.17.0"
-source = "git+https://github.com/scraptors/boring?rev=1918704a217b3a8f0d2c3188705bd084c468e1b0#1918704a217b3a8f0d2c3188705bd084c468e1b0"
+source = "git+https://github.com/scraptors/boring?rev=716eec6b4311c9f1225a2bf506774348a75fa5f4#716eec6b4311c9f1225a2bf506774348a75fa5f4"
 dependencies = [
  "autocfg",
  "bindgen",
@@ -498,7 +498,7 @@ dependencies = [
 [[package]]
 name = "boring-util"
 version = "0.1.0"
-source = "git+https://github.com/scraptors/boring-util?rev=baf7631cd07a9856ee14e093326aaa2b6c1b9e70#baf7631cd07a9856ee14e093326aaa2b6c1b9e70"
+source = "git+https://github.com/scraptors/boring-util?rev=d5db40ee902ff7f7a09812045eb627dce536192f#d5db40ee902ff7f7a09812045eb627dce536192f"
 dependencies = [
  "boring",
  "brotli",
@@ -1891,7 +1891,7 @@ dependencies = [
 [[package]]
 name = "hyper"
 version = "1.7.0"
-source = "git+https://github.com/scraptors/hyper?rev=a98f41f114886f863710aa84957ac43683d3bf33#a98f41f114886f863710aa84957ac43683d3bf33"
+source = "git+https://github.com/scraptors/hyper?rev=d512c79b9209b4e82abd75b35e88c3e88863be75#d512c79b9209b4e82abd75b35e88c3e88863be75"
 dependencies = [
  "atomic-waker",
  "bytes",
@@ -1912,7 +1912,7 @@ dependencies = [
 [[package]]
 name = "hyper-boring"
 version = "4.17.0"
-source = "git+https://github.com/scraptors/boring?rev=1918704a217b3a8f0d2c3188705bd084c468e1b0#1918704a217b3a8f0d2c3188705bd084c468e1b0"
+source = "git+https://github.com/scraptors/boring?rev=716eec6b4311c9f1225a2bf506774348a75fa5f4#716eec6b4311c9f1225a2bf506774348a75fa5f4"
 dependencies = [
  "antidote",
  "boring",
@@ -1931,7 +1931,7 @@ dependencies = [
 [[package]]
 name = "hyper-util"
 version = "0.1.16"
-source = "git+https://github.com/scraptors/hyper-util?rev=2f61fe385de658ee4d4bca8d1f9a7ed190a22a43#2f61fe385de658ee4d4bca8d1f9a7ed190a22a43"
+source = "git+https://github.com/scraptors/hyper-util?rev=a83e94b8d83242ca50d6e82c94fa6423b40ec9d9#a83e94b8d83242ca50d6e82c94fa6423b40ec9d9"
 dependencies = [
  "bytes",
  "futures-channel",
@@ -1942,7 +1942,7 @@ dependencies = [
  "hyper 1.7.0",
  "libc",
  "pin-project-lite",
- "socket2 0.6.0",
+ "socket2 0.5.10",
  "tokio",
  "tower-service",
  "tracing",
@@ -3982,7 +3982,7 @@ dependencies = [
 [[package]]
 name = "tokio-boring"
 version = "4.17.0"
-source = "git+https://github.com/scraptors/boring?rev=1918704a217b3a8f0d2c3188705bd084c468e1b0#1918704a217b3a8f0d2c3188705bd084c468e1b0"
+source = "git+https://github.com/scraptors/boring?rev=716eec6b4311c9f1225a2bf506774348a75fa5f4#716eec6b4311c9f1225a2bf506774348a75fa5f4"
 dependencies = [
  "boring",
  "boring-sys",
