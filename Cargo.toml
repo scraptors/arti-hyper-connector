@@ -6,16 +6,16 @@ edition = "2024"
 [dependencies]
 arti-client = "0.33.0"
 http = "1.3.1"
-hyper-util = { git = "https://github.com/scraptors/hyper-util", rev = "2f61fe385de658ee4d4bca8d1f9a7ed190a22a43", features = ["client", "client-legacy", "tokio", "http1", "http2"] }
+hyper-util = { git = "https://github.com/scraptors/hyper-util", rev = "a83e94b8d83242ca50d6e82c94fa6423b40ec9d9", features = ["client", "client-legacy", "tokio", "http1", "http2"] }
 thiserror = "2.0.15"
 tokio = "1.47.1"
 tor-rtcompat = "0.33.0"
 tower-service = "0.3.3"
 
 [dev-dependencies]
-boring = { git = "https://github.com/scraptors/boring", rev = "1918704a217b3a8f0d2c3188705bd084c468e1b0", features = ["pq-experimental"] }
-hyper = { git = "https://github.com/scraptors/hyper", rev = "a98f41f114886f863710aa84957ac43683d3bf33", features = ["client", "http1", "http2", "h2"]}
-hyper-boring = { git = "https://github.com/scraptors/boring", rev = "1918704a217b3a8f0d2c3188705bd084c468e1b0", features = ["hyper1", "runtime"] }
+boring = { git = "https://github.com/scraptors/boring", rev = "716eec6b4311c9f1225a2bf506774348a75fa5f4", features = ["pq-experimental"] }
+hyper = { git = "https://github.com/scraptors/hyper", rev = "d512c79b9209b4e82abd75b35e88c3e88863be75", features = ["client", "http1", "http2", "h2"]}
+hyper-boring = { git = "https://github.com/scraptors/boring", rev = "716eec6b4311c9f1225a2bf506774348a75fa5f4", features = ["hyper1", "runtime"] }
 tokio = { version = "1.47.1", features = ["macros", "rt-multi-thread", "net"] }
 webpki-root-certs = "1.0.2"
 http = "1.3.1"
@@ -26,7 +26,7 @@ anyhow = "1.0.99"
 arti-client = { version = "0.33.0", features = ["onion-service-client"] }
 tower-http = { version = "0.6.6", features = ["decompression-full", "trace", "follow-redirect", "timeout"] }
 tower = "0.5.2"
-boring-util = { git = "https://github.com/scraptors/boring-util", rev = "baf7631cd07a9856ee14e093326aaa2b6c1b9e70" }
+boring-util = { git = "https://github.com/scraptors/boring-util", rev = "d5db40ee902ff7f7a09812045eb627dce536192f" }
 
 [[example]]
 name = "hyper-client-with-tor-connector"

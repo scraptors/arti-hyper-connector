@@ -14,7 +14,7 @@ use hyper::{
     h2::frame::{Priority, PseudoId, SettingId, StreamId},
 };
 use hyper_boring::v1::HttpsConnector;
-use hyper_util::rt::TokioExecutor;
+use hyper_util::rt::{TokioExecutor, TokioTimer};
 use tower::{Service, ServiceBuilder, ServiceExt};
 use tower_http::{
     decompression::DecompressionLayer,
@@ -156,6 +156,7 @@ async fn main() -> anyhow::Result<()> {
         .build();
 
     let client = hyper_util::client::legacy::Client::builder(TokioExecutor::new())
+        .pool_timer(TokioTimer::new())
         .http2_initial_stream_id(15)
         .http2_header_table_size(65536)
         .http2_priorities(Some(priorities))
