@@ -15,18 +15,21 @@
         naersk-lib = pkgs.callPackage naersk { };
       in
       {
-        defaultPackage = naersk-lib.buildPackage { 
+        defaultPackage = with pkgs; naersk-lib.buildPackage {
+          nativeBuildInputs = [ cargo rustc rustPlatform.bindgenHook pkg-config cmake ];
+          buildInputs = [ sqlite openssl ];
           src = ./.; 
+          cargoOptions = (opts: opts ++ [ "--locked" ]);
         };
+
         devShell = with pkgs; mkShell {
           strictDeps = true;
-
+          # Required for build
           nativeBuildInputs = [ cargo rustc rustPlatform.bindgenHook pkg-config cmake ];
-
+          # System dependencies
           buildInputs = [ sqlite openssl ];
-
-          packages = [ rustPackages.clippy  rust-analyzer ];
-
+          # Env dependencies
+          packages = [ rustPackages.clippy rust-analyzer pre-commit cargo-expand rustfmt ];
           RUST_SRC_PATH = rustPlatform.rustLibSrc;
         };
       }
