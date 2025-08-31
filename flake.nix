@@ -19,11 +19,17 @@
           src = ./.; 
         };
         devShell = with pkgs; mkShell {
-          buildInputs = [ cargo rustc pre-commit rustPackages.clippy rust-analyzer cargo-expand rustfmt sqlite openssl cmake];
+          strictDeps = true;
+
+          nativeBuildInputs = [ cargo rustc rustPlatform.bindgenHook pkg-config cmake ];
+
+          buildInputs = [ sqlite openssl ];
+
+          packages = [ rustPackages.clippy  rust-analyzer ];
+
           RUST_SRC_PATH = rustPlatform.rustLibSrc;
         };
       }
     );
 }
-
 
