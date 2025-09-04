@@ -13,9 +13,12 @@ use hyper::{
     body::Bytes,
     h2::frame::{Priority, PseudoId, SettingId, StreamId},
 };
-use hyper_boring::v1::HttpsConnector;
+use hyper_boring::{
+    HttpsLayerSettings,
+    v1::{HttpsConnector, HttpsLayer},
+};
 use hyper_util::rt::{TokioExecutor, TokioTimer};
-use tower::{Service, ServiceBuilder, ServiceExt};
+use tower::{Layer, Service, ServiceBuilder, ServiceExt};
 use tower_http::{
     decompression::DecompressionLayer,
     follow_redirect::{
@@ -95,7 +98,14 @@ async fn main() -> anyhow::Result<()> {
 
     let ssl = build_ssl_connector().unwrap();
 
-    let mut https_tor = HttpsConnector::with_connector(arti_connector, ssl)
+    // If we are doing pre shared key then we need a session cache with client, so we use https
+    // layer custom config.
+    // Otherwise we can probably just use HttpsConnector::with_connector() without the hassle
+    let https_layer_settings = HttpsLayerSettings::default();
+    let https_layer = HttpsLayer::with_connector_and_settings(ssl, https_layer_settings);
+
+    let mut https_tor = https_layer
+        .map(|l| l.layer(arti_connector))
         .expect("Can construct https connection over Arti");
 
     https_tor.set_callback(|config, _| {
