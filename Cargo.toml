@@ -26,7 +26,7 @@ tracing-subscriber = { version = "0.3.19", features = ["env-filter"] }
 anyhow = "1.0.99"
 tower-http = { version = "0.6.6", features = ["decompression-full", "trace", "follow-redirect", "timeout"] }
 tower = "0.5.2"
-boring-util = { git = "https://github.com/scraptors/boring-util", rev = "d5db40ee902ff7f7a09812045eb627dce536192f" }
+boring-util = { git = "https://github.com/scraptors/boring-util", rev = "9e5f7bd4e72b671cae5a24b85df00f6e0d3c9886" }
 
 [[example]]
 name = "hyper-client-with-tor-connector"

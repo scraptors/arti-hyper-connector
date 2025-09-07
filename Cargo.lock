@@ -480,7 +480,7 @@ dependencies = [
 [[package]]
 name = "boring-util"
 version = "0.1.0"
-source = "git+https://github.com/scraptors/boring-util?rev=d5db40ee902ff7f7a09812045eb627dce536192f#d5db40ee902ff7f7a09812045eb627dce536192f"
+source = "git+https://github.com/scraptors/boring-util?rev=9e5f7bd4e72b671cae5a24b85df00f6e0d3c9886#9e5f7bd4e72b671cae5a24b85df00f6e0d3c9886"
 dependencies = [
  "boring",
  "brotli",
