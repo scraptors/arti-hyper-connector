@@ -455,8 +455,8 @@ dependencies = [
 
 [[package]]
 name = "boring"
-version = "4.17.0"
-source = "git+https://github.com/scraptors/boring?rev=716eec6b4311c9f1225a2bf506774348a75fa5f4#716eec6b4311c9f1225a2bf506774348a75fa5f4"
+version = "4.19.0"
+source = "git+https://github.com/scraptors/boring?rev=0888fec7496bf623248b66c72dd801a4c3f41952#0888fec7496bf623248b66c72dd801a4c3f41952"
 dependencies = [
  "bitflags 2.9.3",
  "boring-sys",
@@ -467,8 +467,8 @@ dependencies = [
 
 [[package]]
 name = "boring-sys"
-version = "4.17.0"
-source = "git+https://github.com/scraptors/boring?rev=716eec6b4311c9f1225a2bf506774348a75fa5f4#716eec6b4311c9f1225a2bf506774348a75fa5f4"
+version = "4.19.0"
+source = "git+https://github.com/scraptors/boring?rev=0888fec7496bf623248b66c72dd801a4c3f41952#0888fec7496bf623248b66c72dd801a4c3f41952"
 dependencies = [
  "autocfg",
  "bindgen",
@@ -480,11 +480,10 @@ dependencies = [
 [[package]]
 name = "boring-util"
 version = "0.1.0"
-source = "git+https://github.com/scraptors/boring-util?rev=2026c36562fcf885d6df1114223a0d58b0fc0e7d#2026c36562fcf885d6df1114223a0d58b0fc0e7d"
+source = "git+https://github.com/scraptors/boring-util?rev=a870c23e2e3a01bceba42004720d9bd5bd4aac0b#a870c23e2e3a01bceba42004720d9bd5bd4aac0b"
 dependencies = [
  "boring",
  "brotli",
- "bytes",
  "flate2",
  "zstd",
 ]
@@ -1859,8 +1858,8 @@ dependencies = [
 
 [[package]]
 name = "hyper-boring"
-version = "4.17.0"
-source = "git+https://github.com/scraptors/boring?rev=716eec6b4311c9f1225a2bf506774348a75fa5f4#716eec6b4311c9f1225a2bf506774348a75fa5f4"
+version = "4.19.0"
+source = "git+https://github.com/scraptors/boring?rev=0888fec7496bf623248b66c72dd801a4c3f41952#0888fec7496bf623248b66c72dd801a4c3f41952"
 dependencies = [
  "antidote",
  "boring",
@@ -3702,8 +3701,8 @@ dependencies = [
 
 [[package]]
 name = "tokio-boring"
-version = "4.17.0"
-source = "git+https://github.com/scraptors/boring?rev=716eec6b4311c9f1225a2bf506774348a75fa5f4#716eec6b4311c9f1225a2bf506774348a75fa5f4"
+version = "4.19.0"
+source = "git+https://github.com/scraptors/boring?rev=0888fec7496bf623248b66c72dd801a4c3f41952#0888fec7496bf623248b66c72dd801a4c3f41952"
 dependencies = [
  "boring",
  "boring-sys",

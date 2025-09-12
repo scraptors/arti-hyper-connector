@@ -3,7 +3,8 @@ use std::{collections::HashSet, time::Duration};
 use arti_client::{StreamPrefs, TorClient, config::TorClientConfigBuilder};
 use arti_hyper_connector::ArtiConnector;
 use boring::ssl::{
-    ExtensionType, SslConnector, SslConnectorBuilder, SslCurve, SslMethod, SslVersion,
+    ExtensionType, SslCipher, SslCipherRef, SslConnector, SslConnectorBuilder, SslCurve, SslMethod,
+    SslOptions, SslSignatureAlgorithm, SslVersion,
 };
 use boring_util::SslConnectorBuilderExt;
 use http::{HeaderMap, HeaderName, HeaderValue, Request, Uri};
@@ -98,11 +99,17 @@ async fn main() -> anyhow::Result<()> {
 
     let ssl = build_ssl_connector().unwrap();
 
+    // ssl.set_grease_enabled(true);
+
     let mut https_tor = HttpsConnector::with_connector(arti_connector, ssl).unwrap();
 
     https_tor.set_callback(|config, _| {
         config.set_verify_hostname(true);
         config.set_use_server_name_indication(true);
+        config.set_enable_ech_grease(true);
+        // config.appli
+        // config.set_options(SslOptions::NO_RENEGOTIATION)
+        // config.set_options(SslOptions::NO_PSK_DHE_KE)
         Ok(())
     });
 

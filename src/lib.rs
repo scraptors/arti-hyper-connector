@@ -44,7 +44,7 @@ pub enum ConnectionError {
     },
 
     /// Tor (Arti) connection failed.
-    #[error("Tor connection failed")]
+    #[error("arti connection failed")]
     Arti(#[source] arti_client::Error),
 }
 
