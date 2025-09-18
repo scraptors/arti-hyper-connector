@@ -480,7 +480,7 @@ dependencies = [
 [[package]]
 name = "boring-util"
 version = "0.1.0"
-source = "git+https://github.com/scraptors/boring-util?rev=a870c23e2e3a01bceba42004720d9bd5bd4aac0b#a870c23e2e3a01bceba42004720d9bd5bd4aac0b"
+source = "git+https://github.com/scraptors/boring-util?rev=32299b58e7fff47c108769254000b63047f7e77c#32299b58e7fff47c108769254000b63047f7e77c"
 dependencies = [
  "boring",
  "brotli",
@@ -3696,6 +3696,7 @@ dependencies = [
  "slab",
  "socket2 0.6.0",
  "tokio-macros",
+ "tracing",
  "windows-sys 0.59.0",
 ]
 

@@ -17,7 +17,7 @@ tower-service = "0.3.3"
 boring = { git = "https://github.com/scraptors/boring", rev = "0888fec7496bf623248b66c72dd801a4c3f41952", features = ["pq-experimental"] }
 hyper = { git = "https://github.com/scraptors/hyper", rev = "d512c79b9209b4e82abd75b35e88c3e88863be75", features = ["client", "http1", "http2", "h2"]}
 hyper-boring = { git = "https://github.com/scraptors/boring", rev = "0888fec7496bf623248b66c72dd801a4c3f41952", features = ["hyper1", "runtime"] }
-tokio = { version = "1.47.1", features = ["macros", "rt-multi-thread", "net"] }
+tokio = { version = "1.47.1", features = ["macros", "rt-multi-thread", "net", "tracing"] }
 webpki-root-certs = "1.0.2"
 http = "1.3.1"
 http-body-util = "0.1.3"
@@ -26,7 +26,7 @@ tracing-subscriber = { version = "0.3.19", features = ["env-filter"] }
 anyhow = "1.0.99"
 tower-http = { version = "0.6.6", features = ["decompression-full", "trace", "follow-redirect", "timeout"] }
 tower = "0.5.2"
-boring-util = { git = "https://github.com/scraptors/boring-util", rev = "a870c23e2e3a01bceba42004720d9bd5bd4aac0b" }
+boring-util = { git = "https://github.com/scraptors/boring-util", rev = "32299b58e7fff47c108769254000b63047f7e77c" }
 
 [[example]]
 name = "hyper-client-with-tor-connector"
