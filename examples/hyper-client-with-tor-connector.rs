@@ -3,8 +3,7 @@ use std::{collections::HashSet, time::Duration};
 use arti_client::{StreamPrefs, TorClient, config::TorClientConfigBuilder};
 use arti_hyper_connector::ArtiConnector;
 use boring::ssl::{
-    ExtensionType, SslCipher, SslCipherRef, SslConnector, SslConnectorBuilder, SslCurve, SslMethod,
-    SslOptions, SslSignatureAlgorithm, SslVersion,
+    ExtensionType, SslConnector, SslConnectorBuilder, SslCurve, SslMethod, SslVersion,
 };
 use boring_util::SslConnectorBuilderExt;
 use http::{HeaderMap, HeaderName, HeaderValue, Request, Uri};
@@ -14,12 +13,9 @@ use hyper::{
     body::Bytes,
     h2::frame::{Priority, PseudoId, SettingId, StreamId},
 };
-use hyper_boring::v1::{HttpsConnector, HttpsLayer};
-use hyper_util::{
-    client::legacy::Builder,
-    rt::{TokioExecutor, TokioTimer},
-};
-use tower::{Layer, Service, ServiceBuilder, ServiceExt};
+use hyper_boring::v1::HttpsConnector;
+use hyper_util::rt::{TokioExecutor, TokioTimer};
+use tower::{Service, ServiceBuilder, ServiceExt};
 use tower_http::{
     decompression::DecompressionLayer,
     follow_redirect::{
